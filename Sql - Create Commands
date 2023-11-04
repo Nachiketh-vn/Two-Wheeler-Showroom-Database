@@ -16,7 +16,7 @@ create table bike_features(bid int,
                           weight varchar(10),
                           height varchar(10),
                           ground_clearence varchar(10),
-							            foreign key (bid) references bikes_available(bid));
+			  foreign key (bid) references bikes_available(bid));
 					
 
 create table employee(eid int primary key, 
@@ -40,7 +40,7 @@ create table orders(cid int,
                     delivery_date date,
                     color varchar(10),
                     employee_assigned_id int,
-					          foreign key (cid) references customer(cid) ,
+		    foreign key (cid) references customer(cid) ,
                     foreign key (ordered_bike_id) references bikes_available(bid),
                     foreign key (employee_assigned_id) references employee(eid));
 
