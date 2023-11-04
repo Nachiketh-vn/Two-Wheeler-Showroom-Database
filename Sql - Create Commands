@@ -1,0 +1,53 @@
+create database Bike_Showroom;
+
+use Bike_Showroom;
+
+create table bikes_available(bid int primary key,
+                              company varchar(50),
+                              name varchar(50),
+                              status varchar(20),
+                              price decimal(10,2)); 
+
+create table bike_features(bid int,
+                          type varchar(50),
+                          engine_cc varchar(20),
+                          milage varchar(10),
+                          colors varchar(100),
+                          weight varchar(10),
+                          height varchar(10),
+                          ground_clearence varchar(10),
+							            foreign key (bid) references bikes_available(bid));
+					
+
+create table employee(eid int primary key, 
+                      job varchar(50), 
+                      salary decimal(10,2),
+                      age int,gender varchar(10),
+                      email varchar(50));
+
+create table customer(cid int primary key,
+                      cname varchar(50),
+                      caddress varchar(100), 
+                      email varchar(50),
+                      phone_number int(10),
+                      interested_bike varchar(50),
+                      age int(10),
+                      gender varchar(10)); 
+
+create table orders(cid int,
+                    ordered_bike_id int,
+                    price decimal(10,2),
+                    delivery_date date,
+                    color varchar(10),
+                    employee_assigned_id int,
+					          foreign key (cid) references customer(cid) ,
+                    foreign key (ordered_bike_id) references bikes_available(bid),
+                    foreign key (employee_assigned_id) references employee(eid));
+
+alter table orders add oid int primary key;
+
+create table insurance(oid int, 
+                      insurance_price decimal(10,2),
+                      insurance_end_date date, 
+                      foreign key (oid) references orders(oid));
+
