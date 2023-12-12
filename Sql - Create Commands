@@ -1,53 +1,261 @@
-create database Bike_Showroom;
+-- Create database
+CREATE DATABASE IF NOT EXISTS bike_Showroom;
+USE Bike_Showroom;
 
-use Bike_Showroom;
+-- Create bikes_available table
+CREATE TABLE bikes_available (
+    bid INT PRIMARY KEY,
+    company VARCHAR(50),
+    name VARCHAR(50),
+    status VARCHAR(20),
+    price DECIMAL(10, 2)
+);
 
-create table bikes_available(bid int primary key,
-                              company varchar(50),
-                              name varchar(50),
-                              status varchar(20),
-                              price decimal(10,2)); 
+-- Create bike_features table
+CREATE TABLE bike_features (
+    bid INT,
+    type VARCHAR(50),
+    engine_cc VARCHAR(20),
+    milage VARCHAR(10),
+    colors VARCHAR(100),
+    weight VARCHAR(10),
+    height VARCHAR(10),
+    ground_clearence VARCHAR(10),
+    FOREIGN KEY (bid) REFERENCES bikes_available(bid)
+);
 
-create table bike_features(bid int,
-                          type varchar(50),
-                          engine_cc varchar(20),
-                          milage varchar(10),
-                          colors varchar(100),
-                          weight varchar(10),
-                          height varchar(10),
-                          ground_clearence varchar(10),
-			  foreign key (bid) references bikes_available(bid));
-					
+-- Create employee table
+CREATE TABLE employee (
+    eid INT PRIMARY KEY,
+    job VARCHAR(50),
+    salary DECIMAL(10, 2),
+    age INT,
+    gender VARCHAR(10),
+    email VARCHAR(50)
+);
+alter table employee add ename varchar(20);
 
-create table employee(eid int primary key, 
-                      job varchar(50), 
-                      salary decimal(10,2),
-                      age int,gender varchar(10),
-                      email varchar(50));
+-- Create customer table
+CREATE TABLE customer (
+    cid INT PRIMARY KEY,
+    cname VARCHAR(50),
+    caddress VARCHAR(100),
+    email VARCHAR(50),
+    phone_number DOUBLE,
+    interested_bike VARCHAR(50),
+    age INT,
+    gender VARCHAR(10)
+);
 
-create table customer(cid int primary key,
-                      cname varchar(50),
-                      caddress varchar(100), 
-                      email varchar(50),
-                      phone_number int(10),
-                      interested_bike varchar(50),
-                      age int(10),
-                      gender varchar(10)); 
+-- Create orders table
+CREATE TABLE orders (
+    oid INT PRIMARY KEY,
+    cid INT,
+    ordered_bike_id INT,
+    price DECIMAL(10, 2),
+    delivery_date DATE,
+    color VARCHAR(10),
+    employee_assigned_id INT,
+    FOREIGN KEY (cid) REFERENCES customer(cid),
+    FOREIGN KEY (ordered_bike_id) REFERENCES bikes_available(bid),
+    FOREIGN KEY (employee_assigned_id) REFERENCES employee(eid)
+);
 
-create table orders(cid int,
-                    ordered_bike_id int,
-                    price decimal(10,2),
-                    delivery_date date,
-                    color varchar(10),
-                    employee_assigned_id int,
-		    foreign key (cid) references customer(cid) ,
-                    foreign key (ordered_bike_id) references bikes_available(bid),
-                    foreign key (employee_assigned_id) references employee(eid));
+-- Create insurance table
+CREATE TABLE insurance (
+    oid INT,
+    insurance_price DECIMAL(10, 2),
+    insurance_end_date DATE,
+    FOREIGN KEY (oid) REFERENCES orders(oid)
+);
 
-alter table orders add oid int primary key;
+-- Create inventory table
+CREATE TABLE inventory (
+    bid INT PRIMARY KEY,
+    quantity INT,
+    FOREIGN KEY (bid) REFERENCES bikes_available(bid)
+);
 
-create table insurance(oid int, 
-                      insurance_price decimal(10,2),
-                      insurance_end_date date, 
-                      foreign key (oid) references orders(oid));
+-- Create sales table
+CREATE TABLE sales (
+    bid INT,
+    cid INT,
+    eid INT,
+    date_of_sale DATE,
+    PRIMARY KEY (bid, cid, eid),
+    price DECIMAL(10, 2),
+    FOREIGN KEY (bid) REFERENCES bikes_available(bid),
+    FOREIGN KEY (cid) REFERENCES customer(cid),
+    FOREIGN KEY (eid) REFERENCES employee(eid)
+);
+
+-- Insert data into bikes_available table
+INSERT INTO bikes_available VALUES
+(1, 'Hero', 'Splendor', 'Available', 80000.00),
+(2, 'TVS', 'Raider 125', 'Available', 97000.00),
+(3, 'Royal Enfield', 'Hunter 350', 'Available', 150000.00),
+(4, 'Honda', 'SP 125', 'Available', 86000.00),
+(5, 'Yamaha', 'R15 V4', 'Available', 182000.00),
+(6, 'Yamaha', 'MT 15 V2', 'Available', 168000.00),
+(7, 'Harley Davidson', 'X440', 'Available', 240000.00),
+(8, 'TVS', 'Apache RTR 310', 'Available', 242000.00),
+(9, 'Bajaj', 'Pulsar 125', 'Available', 104000.00),
+(10, 'KTM', '200 Duke', 'Available', 200000.00);
+
+-- Insert data into bike_features table
+INSERT INTO bike_features VALUES
+(1, 'Casual', '97 cc', '60 kmpl', 'Black, Silver', '112 kg', '165 mm', '60 kmpl'),
+(2, 'Casual', '124 cc', '56 kmpl', 'Red, Blue', '123 kg', '180 mm', '56 kmpl'),
+(3, 'Cruiser', '350 cc', '36 kmpl', 'White, Silver', '177 kg', '150 mm', '36 kmpl'),
+(4, 'Casual', '124 cc', '65 kmpl', 'Black, Red', '116 kg', '160 mm', '65 kmpl'),
+(5, 'Sports', '155 cc', '50 kmpl', 'Black, Blue', '141 kg', '170 mm', '50 kmpl'),
+(6, 'Sports', '155 cc', '48 kmpl', 'Black, Silver', '141 kg', '170 mm', '48 kmpl'),
+(7, 'Cruiser', '440 cc', '35 kmpl', 'Black, Yellow', '190 kg', '170 mm', '35 kmpl'),
+(8, 'Sports', '310 cc', '30 kmpl', 'Black, Red', '169 kg', '180 mm', '30 kmpl'),
+(9, 'Casual', '125 cc', '50 kmpl', 'Blue, White', '140 kg', '165 mm', '50 kmpl'),
+(10, 'Sports', '200 cc', '34 kmpl', 'Blue, Orange', '159 kg', '155 mm', '34 kmpl');
+
+alter table bike_features drop column ground_clearence;
+-- Insert data into employee table
+INSERT INTO employee VALUES
+(1, 'Sales Executive', 25000.00, 32, 'Male', 'sudarshan@gmail.com','Sudarshan'),
+(2, 'Sales Executive', 25000.00, 25, 'Female', 'sudha@gmail.com','Sudha'),
+(3, 'Accountant', 35000.00, 35, 'Male', 'lohith@gmail.com','Lohith'),
+(4, 'Sales Manager', 50000.00, 47, 'Female', 'rukmini@gmail.com','Rukmini'),
+(5, 'Sales Executive', 25000.00, 28, 'Male', 'ullekh@gmail.com','Ullekh');
+
+select * from orders;
+-- Insert data into customer table
+INSERT INTO customer VALUES
+(1, 'Prabhas', 'Afzalpur, Karnataka', 'prabhas@gmail.com', 9008625321, 'X 440', 38, 'Male'),
+(2, 'Rocky', 'Kolar, Karnataka', 'rocky@gmail.com', 7890612349, '200 Duke', 32, 'Male'),
+(3, 'Priya', 'Mumbai, Maharashtra', 'priya@gmail.com', 8965236562, 'SP 125', 31, 'Female'),
+(4, 'Shreeram', 'Tiptur, Karnataka', 'shreeram@gmail.com', 6864763792, 'MT 15 V2', 22, 'Male'),
+(5, 'Lohith', 'Davangere, Karnataka', 'lohith@gmail.com', 8827645632, 'Splendor', 20, 'Male'),
+(6, 'Reddy', 'Ballari, Karnataka', 'reddy@gmail.com', 7374653543, 'Apache RTR 310', 30, 'Male'),
+(7, 'Supreeth', 'Dobalapur, Karnataka', 'supreeth@gmail.com', 7265839672, 'Pulsar 125', 25, 'Male'),
+(8, 'Ahad', 'Gadag, Karnataka', 'ahad@gmail.com', 8736463263, 'Raider 125', 60, 'Male'),
+(9, 'Vinod', 'Mysore, Karnataka', 'vinod@gmail.com', 9965634722, 'Hunter 350', 28, 'Male'),
+(10, 'Pushpa Raj', 'Vellore, Tamil Nadu', 'pushpa@gmail.com', 6626752899, 'R15 V4', 29,'Male');
+
+
+-- Insert data into orders table
+INSERT INTO orders VALUES
+(1, 1, 1,80000.00 ,'2024-01-01', 'Black', 1),
+(2, 2, 2,97000.00, '2024-02-01', 'Red', 2),
+(3, 3, 3,150000.00, '2024-03-01', 'White', 3),
+(4, 4, 4,86000.00, '2024-04-01', 'Black', 4),
+(5, 5, 5,182000.00, '2024-05-01', 'Blue', 5),
+(6, 6, 1,80000.00, '2024-06-01', 'Black', 1),
+(7, 7, 2,97000.00, '2024-07-01', 'Blue', 2),
+(8, 8, 3,150000.00, '2024-08-01', 'Silver', 3),
+(9, 9, 4,86000.00, '2024-09-01', 'Red', 4),
+(10, 10, 5,182000.00, '2024-10-01', 'Black', 5);
+
+-- Now, you can insert data into the insurance table
+INSERT INTO insurance VALUES
+(1, 5000.00, '2025-01-01'),
+(2, 6000.00, '2025-02-01'),
+(3, 7000.00, '2025-03-01'),
+(4, 8000.00, '2025-04-01'),
+(5, 9000.00, '2025-05-01'),
+(6, 10000.00, '2025-06-01'),
+(7, 11000.00, '2025-07-01'),
+(8, 12000.00, '2025-08-01'),
+(9, 13000.00, '2025-09-01'),
+(10, 14000.00, '2025-10-01');
+
+-- Insert data into sales table
+INSERT INTO sales VALUES
+(2, 2, 2, '2023-02-01', 97000.00),
+(3, 3, 3, '2023-03-01', 150000.00),
+(4, 4, 4, '2023-04-01', 86000.00),
+(5, 5, 5, '2023-05-01', 182000.00),
+(6, 6, 1, '2023-06-01', 168000.00),
+(7, 7, 2, '2023-07-01', 240000.00),
+(8, 8, 3, '2023-08-01', 242000.00),
+(9, 9, 4, '2023-09-01', 104000.00),
+(10, 10, 5, '2023-10-01', 200000.00),
+(1, 1, 1, '2023-01-01', 80000.00);
+
+-- Insert data into inventory table
+INSERT INTO inventory VALUES
+(1, 20),  -- Assuming an initial quantity of 20 for bike with bid 1
+(2, 15),
+(3, 25),
+(4, 18),
+(5, 30),
+(6, 22),
+(7, 10),
+(8, 12),
+(9, 28),
+(10, 15);
+
+
+DELIMITER //
+CREATE TRIGGER enforce_minimum_bike_price
+BEFORE INSERT ON bikes_available
+FOR EACH ROW
+BEGIN
+    IF NEW.price < 50000.00 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bike price cannot be less than 50000.00';
+    END IF;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER update_inventory_on_sale
+AFTER INSERT ON sales
+FOR EACH ROW
+BEGIN
+    UPDATE inventory
+    SET quantity = quantity - 1
+    WHERE bid = NEW.bid;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER calculate_total_sales_amount
+AFTER INSERT ON sales
+FOR EACH ROW
+BEGIN
+    UPDATE employee
+    SET total_sales_amount = total_sales_amount + NEW.price
+    WHERE eid = NEW.eid;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER auto_assign_job_title
+BEFORE INSERT ON employee
+FOR EACH ROW
+BEGIN
+    SET NEW.job = CASE
+        WHEN NEW.salary < 30000.00 THEN 'Junior Sales Executive'
+        WHEN NEW.salary >= 30000.00 AND NEW.salary < 50000.00 THEN 'Senior Sales Executive'
+        ELSE 'Sales Manager'
+    END;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER update_customer_interest
+AFTER INSERT ON orders
+FOR EACH ROW
+BEGIN
+    UPDATE customer
+    SET interested_bike = (SELECT name FROM bikes_available WHERE bid = NEW.ordered_bike_id)
+    WHERE cid = NEW.cid;
+END;
+//
+DELIMITER ;
+
+
+
+
 
