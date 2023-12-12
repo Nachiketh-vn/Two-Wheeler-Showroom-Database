@@ -1,4 +1,5 @@
 -- Create database
+
 CREATE DATABASE IF NOT EXISTS bike_Showroom;
 USE Bike_Showroom;
 
@@ -38,12 +39,16 @@ alter table employee add ename varchar(20);
 -- Create customer table
 CREATE TABLE customer (
     cid INT PRIMARY KEY,
+    eid int,
+    bid int,
     cname VARCHAR(50),
     caddress VARCHAR(100),
     email VARCHAR(50),
     phone_number DOUBLE,
     interested_bike VARCHAR(50),
     age INT,
+    FOREIGN KEY (bid) REFERENCES bikes_available(bid),
+    FOREIGN KEY (eid) REFERENCES employee(eid),
     gender VARCHAR(10)
 );
 
@@ -63,6 +68,7 @@ CREATE TABLE orders (
 
 -- Create insurance table
 CREATE TABLE insurance (
+	iid int,
     oid INT,
     insurance_price DECIMAL(10, 2),
     insurance_end_date DATE,
@@ -127,16 +133,16 @@ INSERT INTO employee VALUES
 select * from orders;
 -- Insert data into customer table
 INSERT INTO customer VALUES
-(1, 'Prabhas', 'Afzalpur, Karnataka', 'prabhas@gmail.com', 9008625321, 'X 440', 38, 'Male'),
-(2, 'Rocky', 'Kolar, Karnataka', 'rocky@gmail.com', 7890612349, '200 Duke', 32, 'Male'),
-(3, 'Priya', 'Mumbai, Maharashtra', 'priya@gmail.com', 8965236562, 'SP 125', 31, 'Female'),
-(4, 'Shreeram', 'Tiptur, Karnataka', 'shreeram@gmail.com', 6864763792, 'MT 15 V2', 22, 'Male'),
-(5, 'Lohith', 'Davangere, Karnataka', 'lohith@gmail.com', 8827645632, 'Splendor', 20, 'Male'),
-(6, 'Reddy', 'Ballari, Karnataka', 'reddy@gmail.com', 7374653543, 'Apache RTR 310', 30, 'Male'),
-(7, 'Supreeth', 'Dobalapur, Karnataka', 'supreeth@gmail.com', 7265839672, 'Pulsar 125', 25, 'Male'),
-(8, 'Ahad', 'Gadag, Karnataka', 'ahad@gmail.com', 8736463263, 'Raider 125', 60, 'Male'),
-(9, 'Vinod', 'Mysore, Karnataka', 'vinod@gmail.com', 9965634722, 'Hunter 350', 28, 'Male'),
-(10, 'Pushpa Raj', 'Vellore, Tamil Nadu', 'pushpa@gmail.com', 6626752899, 'R15 V4', 29,'Male');
+(1,1,7, 'Prabhas', 'Afzalpur, Karnataka', 'prabhas@gmail.com', 9008625321, 'X 440', 38, 'Male'),
+(2,2,10, 'Rocky', 'Kolar, Karnataka', 'rocky@gmail.com', 7890612349, '200 Duke', 32, 'Male'),
+(3,3,4, 'Priya', 'Mumbai, Maharashtra', 'priya@gmail.com', 8965236562, 'SP 125', 31, 'Female'),
+(4,4,6, 'Shreeram', 'Tiptur, Karnataka', 'shreeram@gmail.com', 6864763792, 'MT 15 V2', 22, 'Male'),
+(5,5,1, 'Lohith', 'Davangere, Karnataka', 'lohith@gmail.com', 8827645632, 'Splendor', 20, 'Male'),
+(6,1,8, 'Reddy', 'Ballari, Karnataka', 'reddy@gmail.com', 7374653543, 'Apache RTR 310', 30, 'Male'),
+(7,2,9, 'Supreeth', 'Dobalapur, Karnataka', 'supreeth@gmail.com', 7265839672, 'Pulsar 125', 25, 'Male'),
+(8,3,2, 'Ahad', 'Gadag, Karnataka', 'ahad@gmail.com', 8736463263, 'Raider 125', 60, 'Male'),
+(9,4,3, 'Vinod', 'Mysore, Karnataka', 'vinod@gmail.com', 9965634722, 'Hunter 350', 28, 'Male'),
+(10,5,5, 'Pushpa Raj', 'Vellore, Tamil Nadu', 'pushpa@gmail.com', 6626752899, 'R15 V4', 29,'Male');
 
 
 -- Insert data into orders table
@@ -154,16 +160,16 @@ INSERT INTO orders VALUES
 
 -- Now, you can insert data into the insurance table
 INSERT INTO insurance VALUES
-(1, 5000.00, '2025-01-01'),
-(2, 6000.00, '2025-02-01'),
-(3, 7000.00, '2025-03-01'),
-(4, 8000.00, '2025-04-01'),
-(5, 9000.00, '2025-05-01'),
-(6, 10000.00, '2025-06-01'),
-(7, 11000.00, '2025-07-01'),
-(8, 12000.00, '2025-08-01'),
-(9, 13000.00, '2025-09-01'),
-(10, 14000.00, '2025-10-01');
+(1,1, 5000.00, '2025-01-01'),
+(2,2, 6000.00, '2025-02-01'),
+(3,3, 7000.00, '2025-03-01'),
+(4,4, 8000.00, '2025-04-01'),
+(5,5, 9000.00, '2025-05-01'),
+(6,6, 10000.00, '2025-06-01'),
+(7,7, 11000.00, '2025-07-01'),
+(8,8, 12000.00, '2025-08-01'),
+(9,9, 13000.00, '2025-09-01'),
+(10,10, 14000.00, '2025-10-01');
 
 -- Insert data into sales table
 INSERT INTO sales VALUES
