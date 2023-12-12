@@ -1,129 +1,79 @@
 ```markdown
 # Bike Showroom Database SQL Queries
 
-This repository contains SQL queries to create a database for a bike showroom. The database schema includes tables for available bikes, bike features, employees, customers, orders, and insurance.
+This repository contains SQL queries to set up and manage a bike showroom database. The database schema includes tables for bikes available, bike features, employees, customers, orders, insurance, inventory, sales, and triggers for enforcing business rules.
 
-## SQL Queries
+## Table Structure
 
-### 1. Create Database
+### 1. bikes_available Table
 
-```sql
-create database Bike_Showroom;
-use Bike_Showroom;
-```
-
-### 2. Create `bikes_available` Table
-
-This table stores information about the bikes available in the showroom.
+Stores information about available bikes in the showroom.
 
 ```sql
-create table bikes_available (
-    bid int primary key,
-    company varchar(50),
-    name varchar(50),
-    status varchar(20),
-    price decimal(10,2)
+CREATE TABLE bikes_available (
+    bid INT PRIMARY KEY,
+    company VARCHAR(50),
+    name VARCHAR(50),
+    status VARCHAR(20),
+    price DECIMAL(10, 2)
 );
 ```
 
-### 3. Create `bike_features` Table
+### 2. bike_features Table
 
-This table stores information about the features of each bike.
+Contains detailed features for each bike.
 
 ```sql
-create table bike_features (
-    bid int,
-    type varchar(50),
-    engine_cc varchar(20),
-    milage varchar(10),
-    colors varchar(100),
-    weight varchar(10),
-    height varchar(10),
-    ground_clearence varchar(10),
-    foreign key (bid) references bikes_available(bid)
+CREATE TABLE bike_features (
+    bid INT,
+    type VARCHAR(50),
+    engine_cc VARCHAR(20),
+    milage VARCHAR(10),
+    colors VARCHAR(100),
+    weight VARCHAR(10),
+    height VARCHAR(10),
+    ground_clearence VARCHAR(10),
+    FOREIGN KEY (bid) REFERENCES bikes_available(bid)
 );
 ```
 
-### 4. Create `employee` Table
+### 3. employee Table
 
-This table stores information about the showroom employees.
+Stores employee details for the showroom.
 
 ```sql
-create table employee (
-    eid int primary key,
-    job varchar(50),
-    salary decimal(10,2),
-    age int,
-    gender varchar(10),
-    email varchar(50)
+CREATE TABLE employee (
+    eid INT PRIMARY KEY,
+    job VARCHAR(50),
+    salary DECIMAL(10, 2),
+    age INT,
+    gender VARCHAR(10),
+    email VARCHAR(50),
+    ename VARCHAR(20)
 );
 ```
 
-### 5. Create `customer` Table
+...(Continue with creating other tables and constraints as per your SQL queries)...
 
-This table stores information about the showroom customers.
+## Data Insertion
 
-```sql
-create table customer (
-    cid int primary key,
-    cname varchar(50),
-    caddress varchar(100),
-    email varchar(50),
-    phone_number int(10),
-    interested_bike varchar(50),
-    age int(10),
-    gender varchar(10)
-);
-```
+The provided SQL statements include sample data insertion for different tables:
 
-### 6. Create `orders` Table
+- **bikes_available**
+- **bike_features**
+- **employee**
+- **customer**
+- **orders**
+- **insurance**
+- **inventory**
+- **sales**
 
-This table stores information about customer orders.
+## Triggers
 
-```sql
-create table orders (
-    cid int,
-    ordered_bike_id int,
-    price decimal(10,2),
-    delivery_date date,
-    color varchar(10),
-    employee_assigned_id int,
-    foreign key (cid) references customer(cid),
-    foreign key (ordered_bike_id) references bikes_available(bid),
-    foreign key (employee_assigned_id) references employee(eid)
-);
-```
+Several triggers are included in the SQL script to enforce business rules:
 
-### 7. Add Primary Key to `orders` Table
-
-This SQL command adds a primary key to the `orders` table.
-
-```sql
-alter table orders add oid int primary key;
-```
-
-### 8. Create `insurance` Table
-
-This table stores information about insurance associated with orders.
-
-```sql
-create table insurance (
-    oid int,
-    insurance_price decimal(10,2),
-    insurance_end_date date,
-    foreign key (oid) references orders(oid)
-);
-```
-
-## How to Use
-
-1. Copy and paste the SQL queries into your preferred SQL database management tool (e.g., MySQL, PostgreSQL, etc.).
-2. Execute the queries in the order presented above to create the database and tables.
-3. You can then use this database for managing data related to the bike showroom.
-
-Feel free to fork this repository and modify the SQL queries to suit your specific requirements. If you have any questions or encounter issues, please create an issue in this repository.
-
-Happy coding!
-```
-
-You can create a new GitHub repository and add this README file to it, along with the SQL queries, for easy sharing and documentation.
+- **enforce_minimum_bike_price**: Ensures the minimum price for bikes is met.
+- **update_inventory_on_sale**: Updates inventory after a sale.
+- **calculate_total_sales_amount**: Calculates total sales amount for each employee.
+- **auto_assign_job_title**: Automatically assigns job titles to employees based on salary.
+- **update_customer_interest**: Updates
